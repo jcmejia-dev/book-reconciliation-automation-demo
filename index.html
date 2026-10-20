@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A fully synthetic book reconciliation automation demo showing transaction matching, exception handling, human review, and operational reporting." />
+  <meta name="theme-color" content="#07111f" />
+  <title>Book Reconciliation Automation Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Book Recon Demo home">
+        <span class="brand-mark">BR</span>
+        <span>
+          <strong>Book Recon</strong>
+          <small>Automation Sandbox</small>
+        </span>
+      </a>
+      <nav class="header-actions" aria-label="Project links">
+        <a href="https://github.com/jcmejia-dev/book-reconciliation-automation-demo" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="button secondary" href="https://jcmejia.vercel.app" target="_blank" rel="noreferrer">Portfolio</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero section-pad">
+        <div class="eyebrow"><span class="pulse-dot"></span> SAFE PUBLIC DEMO · SYNTHETIC DATA ONLY</div>
+        <div class="hero-grid">
+          <div>
+            <h1>Automated book reconciliation, demonstrated without exposing production data.</h1>
+            <p class="hero-copy">
+              This sandbox recreates the decision flow of a financial reconciliation workflow: validate inputs, match safe records, route ambiguous items to human review, and generate an operational summary.
+            </p>
+            <div class="hero-actions">
+              <button id="runDemo" class="button primary" type="button">Run demo reconciliation</button>
+              <button id="resetDemo" class="button ghost" type="button">Reset</button>
+            </div>
+            <p class="microcopy">No API calls. No real accounts. No company records. Everything runs locally in your browser.</p>
+          </div>
+          <aside class="architecture-card" aria-label="Automation architecture">
+            <div class="architecture-title">Workflow architecture</div>
+            <div class="flow">
+              <div class="flow-node active">01 <span>Preflight</span></div>
+              <div class="flow-line"></div>
+              <div class="flow-node">02 <span>Compile</span></div>
+              <div class="flow-line"></div>
+              <div class="flow-node">03 <span>Match</span></div>
+              <div class="flow-line"></div>
+              <div class="flow-node">04 <span>Exceptions</span></div>
+              <div class="flow-line"></div>
+              <div class="flow-node">05 <span>Report</span></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="stats-wrap section-pad" aria-label="Reconciliation metrics">
+        <div class="stat-card">
+          <span class="stat-label">Bank records</span>
+          <strong id="bankCount">6</strong>
+          <small>synthetic feed</small>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Ledger records</span>
+          <strong id="ledgerCount">6</strong>
+          <small>synthetic books</small>
+        </div>
+        <div class="stat-card accent-green">
+          <span class="stat-label">Safe matches</span>
+          <strong id="matchedCount">—</strong>
+          <small id="matchedCaption">run the workflow</small>
+        </div>
+        <div class="stat-card accent-amber">
+          <span class="stat-label">Human review</span>
+          <strong id="reviewCount">—</strong>
+          <small id="reviewCaption">exceptions waiting</small>
+        </div>
+      </section>
+
+      <section class="workspace section-pad">
+        <div class="section-heading">
+          <div>
+            <span class="kicker">01 · INPUT</span>
+            <h2>Source records</h2>
+          </div>
+          <span class="status-pill neutral" id="inputStatus">Ready</span>
+        </div>
+
+        <div class="table-grid">
+          <article class="panel">
+            <div class="panel-header">
+              <div><span class="panel-icon bank-icon">B</span><strong>Bank Feed</strong></div>
+              <span>6 rows</span>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th>Reference</th><th>Counterparty</th><th class="numeric">Amount</th></tr></thead>
+                <tbody id="bankTable"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <div><span class="panel-icon ledger-icon">L</span><strong>Book Ledger</strong></div>
+              <span>6 rows</span>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th>Reference</th><th>Description</th><th class="numeric">Amount</th></tr></thead>
+                <tbody id="ledgerTable"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="workspace section-pad results-zone" id="resultsSection" aria-live="polite">
+        <div class="section-heading">
+          <div>
+            <span class="kicker">02 · AUTOMATION RESULT</span>
+            <h2>Reconciliation decisions</h2>
+          </div>
+          <span class="status-pill neutral" id="runStatus">Not run</span>
+        </div>
+
+        <div class="progress-card">
+          <div class="progress-topline">
+            <span id="progressText">Workflow ready</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+          <div class="step-row" id="stepRow">
+            <span data-step="0">Preflight</span><span data-step="1">Compile</span><span data-step="2">Match</span><span data-step="3">Exceptions</span><span data-step="4">Report</span>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <article class="panel result-panel">
+            <div class="panel-header"><div><span class="panel-icon success-icon">✓</span><strong>Safely Matched</strong></div><span id="matchedBadge">0 records</span></div>
+            <div id="matchedList" class="result-list empty-state">Run the demo to process records.</div>
+          </article>
+          <article class="panel result-panel">
+            <div class="panel-header"><div><span class="panel-icon review-icon">!</span><strong>Human Review Queue</strong></div><span id="reviewBadge">0 records</span></div>
+            <div id="reviewList" class="result-list empty-state">Ambiguous items will be held here instead of being force-matched.</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="workspace section-pad">
+        <div class="section-heading">
+          <div>
+            <span class="kicker">03 · REPORTING</span>
+            <h2>Operational alert</h2>
+          </div>
+          <span class="status-pill neutral" id="reportStatus">Waiting</span>
+        </div>
+        <article class="discord-card">
+          <div class="discord-sidebar"><span>BR</span></div>
+          <div class="discord-content">
+            <div class="discord-meta"><strong>Book Recon Agent</strong><span class="bot-badge">APP</span><time>demo run</time></div>
+            <div id="discordMessage" class="discord-message muted">Run the reconciliation to generate a structured finance-operations summary.</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="explain section-pad">
+        <div class="section-heading compact">
+          <div><span class="kicker">WHY THIS DEMO EXISTS</span><h2>Proof without leaking private systems</h2></div>
+        </div>
+        <div class="explain-grid">
+          <article><span>01</span><h3>Same engineering concepts</h3><p>Matching rules, validation, exception routing, reporting, and human-review boundaries mirror the type of workflow logic used in production automation.</p></article>
+          <article><span>02</span><h3>Zero production data</h3><p>All companies, values, references, dates, and records in this repository were invented specifically for this public demonstration.</p></article>
+          <article><span>03</span><h3>Safe automation first</h3><p>The demo intentionally refuses uncertain matches. Ambiguous records are surfaced for a person rather than silently forcing a financial decision.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div><strong>Jamie Cristian A. Mejia</strong><span>Software Development · APIs · Workflow Automation</span></div>
+      <p>Public portfolio demonstration · 2026</p>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
