@@ -1,0 +1,8 @@
+[
+  {"reference":"BNK-2401","counterparty":"Northwind Supplies","amount":18450,"date":"2026-10-14"},
+  {"reference":"BNK-2402","counterparty":"Harborline Logistics","amount":9275,"date":"2026-10-14"},
+  {"reference":"BNK-2403","counterparty":"Pine & Co.","amount":12600,"date":"2026-10-15"},
+  {"reference":"BNK-2404","counterparty":"Blueforge Services","amount":22150,"date":"2026-10-15"},
+  {"reference":"BNK-2405","counterparty":"Orchid Office Hub","amount":7990,"date":"2026-10-16"},
+  {"reference":"BNK-2406","counterparty":"Summit Fieldworks","amount":15320,"date":"2026-10-16"}
+]
