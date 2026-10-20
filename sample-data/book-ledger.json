@@ -1,0 +1,8 @@
+[
+  {"reference":"BNK-2401","description":"Supplier settlement","amount":18450,"date":"2026-10-14"},
+  {"reference":"BNK-2402","description":"Freight and delivery","amount":9275,"date":"2026-10-14"},
+  {"reference":"BNK-2403","description":"Materials purchase","amount":12600,"date":"2026-10-15"},
+  {"reference":"BNK-2404","description":"Technical services","amount":22150,"date":"2026-10-15"},
+  {"reference":"BNK-2405","description":"Office supplies","amount":7690,"date":"2026-10-16"},
+  {"reference":"BK-2406-ALT","description":"Field maintenance","amount":15320,"date":"2026-10-16"}
+]
