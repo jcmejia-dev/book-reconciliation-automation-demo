@@ -115,6 +115,10 @@ Then visit:
 http://localhost:8000
 ```
 
+## Deployment
+
+This demo is published from the `main` branch root using GitHub Pages.
+
 ## What I built
 
 I designed and implemented the public sandbox, reconciliation decision rules, exception routing, workflow-state animation, metrics, and operational report UI.
